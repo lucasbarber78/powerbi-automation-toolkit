@@ -1,0 +1,36 @@
+{
+    "measures": [
+        {
+            "name": "Total Revenue",
+            "table": "FactSales",
+            "expression": "SUM(FactSales[Revenue])",
+            "description": "Sum of all revenue",
+            "formatString": "#,##0.00",
+            "displayFolder": "Revenue Metrics"
+        },
+        {
+            "name": "YTD Revenue",
+            "table": "FactSales",
+            "expression": "TOTALYTD(SUM(FactSales[Revenue]), DimDate[Date])",
+            "description": "Year to date revenue",
+            "formatString": "#,##0.00",
+            "displayFolder": "Revenue Metrics"
+        },
+        {
+            "name": "Revenue Growth %",
+            "table": "FactSales",
+            "expression": "VAR PreviousRevenue = CALCULATE([Total Revenue], DATEADD(DimDate[Date], -1, YEAR)) RETURN DIVIDE([Total Revenue] - PreviousRevenue, PreviousRevenue, 0)",
+            "description": "Year over year revenue growth",
+            "formatString": "0.00%;-0.00%;0.00%",
+            "displayFolder": "Growth Metrics"
+        },
+        {
+            "name": "Customer Count",
+            "table": "FactSales",
+            "expression": "DISTINCTCOUNT(FactSales[CustomerID])",
+            "description": "Count of unique customers",
+            "formatString": "#,##0",
+            "displayFolder": "Customer Metrics"
+        }
+    ]
+}
