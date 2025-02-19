@@ -1,0 +1,27 @@
+# VS Code files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# PowerShell
+*.ps1.log
+
+# Power BI files
+*.pbix
+*.pbit
+
+# Credentials and secrets
+**/credentials.json
+**/secrets.json
+
+# Configuration files with sensitive data
+config/*-prod.json
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
