@@ -1,0 +1,28 @@
+{
+    "clients": [
+        {
+            "clientId": "CLIENT001",
+            "name": "Sample Client 1",
+            "databaseServer": "server1.database.windows.net",
+            "databaseName": "ClientDB1",
+            "datasetId": "00000000-0000-0000-0000-000000000000",
+            "parameters": {
+                "ReportingPeriod": "Monthly",
+                "Currency": "USD",
+                "FiscalYear": "2025"
+            }
+        }
+    ],
+    "templateSettings": {
+        "basePath": "../templates",
+        "outputPath": "../output",
+        "defaultTemplate": "base-template.pbit",
+        "updateSchedule": "Daily",
+        "retentionDays": 30
+    },
+    "logging": {
+        "enabled": true,
+        "path": "../logs",
+        "level": "Information"
+    }
+}
