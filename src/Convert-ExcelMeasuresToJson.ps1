@@ -19,10 +19,10 @@ $measureArray = @()
 foreach ($measure in $measures) {
     $measureObject = @{
         name = $measure.MEASURE_NAME
-        table = $measure.MEASURE_TABLE
-        expression = $measure.MEASURE_EXPRESSION
-        description = if ($measure.MEASURE_DESCRIPTION) { $measure.MEASURE_DESCRIPTION } else { "" }
-        formatString = if ($measure.MEASURE_FORMAT_STRING) { $measure.MEASURE_FORMAT_STRING } else { "#,##0.00" }
+        table = $measure.MEASUREGROUP_NAME
+        expression = $measure.EXPRESSION
+        description = if ($measure.DESCRIPTION) { $measure.DESCRIPTION } else { "" }
+        formatString = if ($measure.DEFAULT_FORMAT_STRING) { $measure.DEFAULT_FORMAT_STRING } else { "#,##0.00" }
         displayFolder = if ($measure.MEASURE_DISPLAY_FOLDER) { $measure.MEASURE_DISPLAY_FOLDER } else { "General" }
     }
     
