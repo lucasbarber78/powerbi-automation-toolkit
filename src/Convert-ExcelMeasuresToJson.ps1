@@ -28,10 +28,10 @@ foreach ($measure in $measures) {
         
         # Handle special characters
         $cleanExpression = $cleanExpression.Replace("\u003c", "<")
-                                         .Replace("\u003e", ">")
-                                         .Replace("\u0026\u0026", "&&")
-                                         .Replace("\n", "`n")  # Preserve actual newlines
-                                         .Replace("\t", "`t")  # Preserve actual tabs
+        $cleanExpression = $cleanExpression.Replace("\u003e", ">")
+        $cleanExpression = $cleanExpression.Replace("\u0026\u0026", "&&")
+        $cleanExpression = $cleanExpression.Replace("\n", "`n")
+        $cleanExpression = $cleanExpression.Replace("\t", "`t")
     }
 
     $measureObject = @{
