@@ -17,12 +17,21 @@ $measures = Import-Excel -Path $ExcelPath
 $measureArray = @()
 
 foreach ($measure in $measures) {
-    # Clean up the expression by removing escape sequences
+    # Clean up the expression by properly handling DAX formatting
     $cleanExpression = $measure.EXPRESSION
     if ($cleanExpression) {
-        $cleanExpression = $cleanExpression.Replace("\n", " ").Replace("\t", " ")
-        # Remove multiple spaces
-        $cleanExpression = [System.Text.RegularExpressions.Regex]::Replace($cleanExpression, "\s+", " ")
+        # Convert Unicode escape sequences back to actual characters
+        $cleanExpression = [Regex]::Unescape($cleanExpression)
+        
+        # Handle single quotes consistently
+        $cleanExpression = $cleanExpression.Replace("'", "'")
+        
+        # Handle special characters
+        $cleanExpression = $cleanExpression.Replace("\u003c", "<")
+                                         .Replace("\u003e", ">")
+                                         .Replace("\u0026\u0026", "&&")
+                                         .Replace("\n", "`n")  # Preserve actual newlines
+                                         .Replace("\t", "`t")  # Preserve actual tabs
     }
 
     $measureObject = @{
@@ -44,8 +53,11 @@ $jsonStructure = @{
 
 # Convert to JSON and save with proper formatting
 $jsonString = $jsonStructure | ConvertTo-Json -Depth 10
-# Clean up any remaining escape sequences in the final JSON
-$jsonString = $jsonString.Replace("\n", " ").Replace("\t", " ")
-$jsonString | Set-Content $OutputPath
+
+# Final cleanup of any remaining escape sequences
+$jsonString = [Regex]::Unescape($jsonString)
+
+# Save the file with UTF8 encoding to properly handle special characters
+[System.IO.File]::WriteAllText($OutputPath, $jsonString, [System.Text.Encoding]::UTF8)
 
 Write-Host "Conversion complete. JSON file saved to: $OutputPath"
