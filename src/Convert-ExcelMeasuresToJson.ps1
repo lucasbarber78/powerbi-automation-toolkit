@@ -17,10 +17,18 @@ $measures = Import-Excel -Path $ExcelPath
 $measureArray = @()
 
 foreach ($measure in $measures) {
+    # Clean up the expression by removing escape sequences
+    $cleanExpression = $measure.EXPRESSION
+    if ($cleanExpression) {
+        $cleanExpression = $cleanExpression.Replace("\n", " ").Replace("\t", " ")
+        # Remove multiple spaces
+        $cleanExpression = [System.Text.RegularExpressions.Regex]::Replace($cleanExpression, "\s+", " ")
+    }
+
     $measureObject = @{
         name = $measure.MEASURE_NAME
         table = $measure.MEASUREGROUP_NAME
-        expression = $measure.EXPRESSION
+        expression = $cleanExpression
         description = if ($measure.DESCRIPTION) { $measure.DESCRIPTION } else { "" }
         formatString = if ($measure.DEFAULT_FORMAT_STRING) { $measure.DEFAULT_FORMAT_STRING } else { "#,##0.00" }
         displayFolder = if ($measure.MEASURE_DISPLAY_FOLDER) { $measure.MEASURE_DISPLAY_FOLDER } else { "General" }
@@ -34,7 +42,10 @@ $jsonStructure = @{
     measures = $measureArray
 }
 
-# Convert to JSON and save
-$jsonStructure | ConvertTo-Json -Depth 10 | Set-Content $OutputPath
+# Convert to JSON and save with proper formatting
+$jsonString = $jsonStructure | ConvertTo-Json -Depth 10
+# Clean up any remaining escape sequences in the final JSON
+$jsonString = $jsonString.Replace("\n", " ").Replace("\t", " ")
+$jsonString | Set-Content $OutputPath
 
 Write-Host "Conversion complete. JSON file saved to: $OutputPath"
